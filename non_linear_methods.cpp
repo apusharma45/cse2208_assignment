@@ -12,7 +12,7 @@ double f(double x, double A, double B, double C) {
     return A * pow(x, 2) + B * x + C;
 }
 
-void biSection() {
+ void biSection() {
     double A, B, C;
     cout << "Enter coefficients A, B, C for the equation Ax^2 + Bx + C = 0: ";
     cin >> A >> B >> C;
