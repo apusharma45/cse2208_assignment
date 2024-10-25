@@ -1,6 +1,7 @@
 //main program to navigate here
 #include "linear_methods.h"
 #include "non_linear_methods.h"
+#include"inverseMatrix.h"
 #include <bits/stdc++.h>
 using namespace std;
 
