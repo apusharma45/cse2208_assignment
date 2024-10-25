@@ -2,80 +2,162 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//Jacobi iterative method
-void jacobi() {
-    vector<int> a(5), b(5), c(5), d(5), e(5), f(5);
 
-    cout << "Enter the coefficients for 5 equations (a1, b1, c1, d1, e1, f1 for equation 1, ...):\n";
-    for (int i = 0; i < 5; ++i) {
-        cin >> a[i] >> b[i] >> c[i] >> d[i] >> e[i] >> f[i];
+bool isDiagonalDominant(const vector<vector<int>>& a, const vector<int>& b) {
+    int n = a.size();
+    for (int i = 0; i < n; ++i) {
+        int diagonal = abs(a[i][i]);
+        int sum = 0;
+        for (int j = 0; j < n; ++j) {
+            if (i != j) {
+                sum += abs(a[i][j]);
+            }
+        }
+        if (diagonal < sum) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Calculate the sum of elements of row i, except the kth element
+int rowSumExceptK(const vector<vector<int>>& a, int i, int k) {
+    int sum = 0;
+    int n = a.size();
+    for (int j = 0; j < n; ++j) {
+        if (j != k) {
+            sum += abs(a[i][j]);
+        }
+    }
+    return sum;
+}
+
+bool makeDiagonalDominant(vector<vector<int>>& a, vector<int>& b) {
+    int n = b.size();
+    for (int k = 0; k < n; ++k) {
+        int foundRow = -1;
+        if (abs(a[k][k]) < rowSumExceptK(a, k, k)) {
+            for (int i = k + 1; i < n; ++i) {
+                if (abs(a[i][k]) >= rowSumExceptK(a, i, k)) {
+                    foundRow = i;
+                    break;
+                }
+            }
+            if (foundRow != -1) {
+                swap(a[k], a[foundRow]);
+                swap(b[k], b[foundRow]);
+            }
+        }
+    }
+    return isDiagonalDominant(a, b);
+}
+
+void jacobi() {
+    int n;
+    cout << "Enter the number of variables: ";
+    cin >> n;
+
+    vector<vector<int>> a(n, vector<int>(n));
+    vector<int> b(n);
+    cout << "Enter the coefficients for the equations (a1, b1, ..., an, f for each equation):\n";
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> a[i][j];
+        }
+        cin >> b[i];
     }
 
-    double x = 0, y = 0, z = 0, w = 0, v = 0;
-    double x1, y1, z1, w1, v1;
+    if (!isDiagonalDominant(a, b)) {
+        if (!makeDiagonalDominant(a, b)) {
+            cout << "Can't make diagonally dominant" << endl;
+            return;
+        }
+    }
+
+    vector<double> x(n, 0), x1(n, 0);
     int count = 0;
 
     while (true) {
         count++;
-        x1 = (f[0] - b[0] * y - c[0] * z - d[0] * w - e[0] * v) / a[0];
-        y1 = (f[1] - a[1] * x - c[1] * z - d[1] * w - e[1] * v) / b[1];
-        z1 = (f[2] - a[2] * x - b[2] * y - d[2] * w - e[2] * v) / c[2];
-        w1 = (f[3] - a[3] * x - b[3] * y - c[3] * z - e[3] * v) / d[3];
-        v1 = (f[4] - a[4] * x - b[4] * y - c[4] * z - d[4] * w) / e[4];
-
-        if (abs(x - x1) <= 0.0001 && abs(y - y1) <= 0.0001 && 
-            abs(z - z1) <= 0.0001 && abs(w - w1) <= 0.0001 && 
-            abs(v - v1) <= 0.0001) {
-            break;
+        for (int i = 0; i < n; ++i) {
+            double sum = b[i];
+            for (int j = 0; j < n; ++j) {
+                if (i != j) {
+                    sum -= a[i][j] * x[j];
+                }
+            }
+            x1[i] = sum / a[i][i];
         }
-
-        x = x1; 
-        y = y1; 
-        z = z1; 
-        w = w1; 
-        v = v1;
+        bool convergence = true;
+        for (int i = 0; i < n; ++i) {
+            if (abs(x[i] - x1[i]) > 0.0001) {
+                convergence = false;
+                break;
+            }
+        }
+        if (convergence) break;
+        x = x1;
     }
 
-    cout << "x: " << x1 << "  y: " << y1 << "  z: " << z1 << "  w: " << w1 << "  v: " << v1 << endl;
-    cout << "Result found in " << count << " iterations" << endl;
+    for (int i = 0; i < n; ++i) {
+        cout << "x" << i + 1 << ": " << x1[i] << " ";
+    }
+    cout << "\nResult found in " << count << " iterations\n";
 }
 
 void gauss_seidel() {
-    vector<int> a(5), b(5), c(5), d(5), e(5), f(5);
+    int n;
+    cout << "Enter the number of variables: ";
+    cin >> n;
 
-    cout << "Enter the coefficients for 5 equations (a1, b1, c1, d1, e1, f1 for equation 1, ...):\n";
-    for (int i = 0; i < 5; ++i) {
-        cin >> a[i] >> b[i] >> c[i] >> d[i] >> e[i] >> f[i];
+    vector<vector<int>> a(n, vector<int>(n));
+    vector<int> b(n);
+    cout << "Enter the coefficients for the equations (a1, b1, ..., an, f for each equation):\n";
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            cin >> a[i][j];
+        }
+        cin >> b[i];
     }
 
-    double x = 0, y = 0, z = 0, w = 0, v = 0;
-    double x1, y1, z1, w1, v1;
+    if (!isDiagonalDominant(a, b)) {
+        if (!makeDiagonalDominant(a, b)) {
+            cout << "Can't make diagonally dominant" << endl;
+            return;
+        }
+    }
+
+    vector<double> x(n, 0);
     int count = 0;
 
     while (true) {
         count++;
-        x1 = (f[0] - b[0] * y - c[0] * z - d[0] * w - e[0] * v) / a[0];
-        y1 = (f[1] - a[1] * x1 - c[1] * z - d[1] * w - e[1] * v) / b[1];
-        z1 = (f[2] - a[2] * x1 - b[2] * y1 - d[2] * w - e[2] * v) / c[2];
-        w1 = (f[3] - a[3] * x1 - b[3] * y1 - c[3] * z - e[3] * v) / d[3];
-        v1 = (f[4] - a[4] * x1 - b[4] * y1 - c[4] * z - d[4] * w) / e[4];
-
-        if (abs(x - x1) <= 0.0001 && abs(y - y1) <= 0.0001 && 
-            abs(z - z1) <= 0.0001 && abs(w - w1) <= 0.0001 && 
-            abs(v - v1) <= 0.0001) {
-            break;
+        vector<double> x_old = x;
+        for (int i = 0; i < n; ++i) {
+            double sum = b[i];
+            for (int j = 0; j < n; ++j) {
+                if (i != j) {
+                    sum -= a[i][j] * x[j];
+                }
+            }
+            x[i] = sum / a[i][i];
         }
-
-        x = x1; 
-        y = y1; 
-        z = z1; 
-        w = w1; 
-        v = v1;
+        bool convergence = true;
+        for (int i = 0; i < n; ++i) {
+            if (abs(x[i] - x_old[i]) > 0.0001) {
+                convergence = false;
+                break;
+            }
+        }
+        if (convergence) break;
     }
 
-    cout << "x: " << x1 << "  y: " << y1 << "  z: " << z1 << "  w: " << w1 << "  v: " << v1 << endl;
-    cout << "Result found in " << count << " iterations" << endl;
+    for (int i = 0; i < n; ++i) {
+        cout << "x" << i + 1 << ": " << x[i] << " ";
+    }
+    cout << "\nResult found in " << count << " iterations\n";
 }
+
 
 void gaussElimination() {
     int n;
