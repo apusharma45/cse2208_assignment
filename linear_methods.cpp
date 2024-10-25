@@ -276,6 +276,97 @@ void gaussJordan() {
     cout << endl << endl;
 }
 
+//--------LU decomposition-----------------------
+// Solve L * y = b -->Forward substitution
+vector<double> forward_substitution(const vector<vector<double>> &L, const vector<double> &b, int n)
+{
+    vector<double> y(n);
+    for (int i = 0; i < n; i++)
+    {
+        y[i] = b[i];
+        for (int j = 0; j < i; j++)
+        {
+            y[i] -= L[i][j] * y[j];
+            cout << y[i] << endl;
+        }
+    }
+    return y;
+}
+//  Solve U * x = y -->Backward substitution
+vector<double> backward_substitution(const vector<vector<double>> &U, const vector<double> &y, int n)
+{
+    vector<double> x(n);
+    for (int i = n - 1; i >= 0; i--)
+    {
+        x[i] = y[i];
+        for (int j = i + 1; j < n; j++)
+        {
+            x[i] -= U[i][j] * x[j];
+        }
+        x[i] /= U[i][i];
+        cout << x[i] << endl;
+    }
+    return x;
+}
 void lu_factor() {
-    
+    int n;
+    cout << "Enter the number of variables: ";
+    cin >> n;
+    // Coefficient matrix A
+    vector<vector<double>> A(n, vector<double>(n));
+    // the constant value b
+    vector<double> b(n);
+    cout << "Enter the coefficient of the variable and constant : " ;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cout << "x" << j + 1 << " = ";
+            cin >> A[i][j];
+        }
+        cout << "c" << i + 1 << " = ";
+        cin >> b[i];
+    }
+    // creating a Lower triangular matrix
+    vector<vector<double>> L(n, vector<double>(n, 0));
+    // creating an upper triangular matrix U=A
+    vector<vector<double>> U(A);
+    // Initializing L as an identity matrix
+    for (int i = 0; i < n; i++)
+    {
+        L[i][i] = 1;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (U[i][i] == 0)
+            {
+                cerr << "Error: Zero pivot encountered. LU decomposition may fail." << endl;
+                return;
+            }
+            double factor = U[j][i] / U[i][i];
+            // string the value in L[i][j]
+            L[j][i] = factor;
+
+            for (int k = 0; k < n; k++)
+            {
+                // eliminating from U[i][j]
+                U[j][k] -= factor * U[i][k];
+            }
+        }
+    }
+    // Solve L * y = b -->Forward substitution
+    vector<double> y = forward_substitution(L, b, n);
+
+    //  Solve U * x = y -->Backward substitution
+    vector<double> x = backward_substitution(U, y, n);
+    // solution
+    cout << "Solution for all the equation :\n";
+    for (int i = 0; i < n; i++)
+    {
+        cout << "x" << i + 1 << " = " << x[i] << endl;
+    }
+    cout << endl;
 }
