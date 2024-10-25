@@ -57,7 +57,7 @@ int main() {
                 // Call runge kutta method
                 break;
             case 11:
-                // Call matrix inversion method
+                   inverse();
                 break;
             case 12:
                 cout << "Exiting the program.\n";
