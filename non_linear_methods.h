@@ -1,6 +1,6 @@
 //header file for non-linear methods here
-#ifndef LINEAR_METHODS_H
-#define LINEAR_METHODS_H
+#ifndef NON_LINEAR_METHODS_H
+#define NON_LINEAR_METHODS_H
 
 void biSection();
 void falsePosition();
