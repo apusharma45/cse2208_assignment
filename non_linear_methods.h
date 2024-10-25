@@ -3,8 +3,11 @@
 #define NON_LINEAR_METHODS_H
 
 void biSection();
+
 void falsePosition();
+
 void newton();
+
 void secant();
 
 #endif
