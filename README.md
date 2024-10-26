@@ -1,6 +1,12 @@
 # cse2208_assignment
 Numerical assignment of group 26 (2107005, 2107030, 2107099)
 
+# RUN COMMAND
+
+```bash
+g++ main.cpp linear_methods.cpp non_linear_methods.cpp inverseMatrix.cpp runge_kutta.cpp -o main; ./main
+
+
 
 
 ## Table of Contents
