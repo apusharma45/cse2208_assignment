@@ -55,7 +55,7 @@ int main() {
                 secant();
                 break;
             case 10:
-                // Call runge kutta method
+                rungeKutta4();
                 break;
             case 11:
                    inverse();
