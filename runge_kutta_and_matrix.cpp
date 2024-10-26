@@ -1,5 +1,4 @@
-//function code for runge kutta and matrix inversion here
-
+//Differential Equations Solution Using 4th Order Runge-Kutta Method
 #include <bits/stdc++.h>
 using namespace std;
 
