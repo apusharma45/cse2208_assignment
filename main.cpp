@@ -14,7 +14,7 @@ int main() {
         cout << "1. Jacobi Iteration           2. Gauss Seidel Iteration       3. Gauss Elimination\n";
         cout << "4. Gauss-Jordan Elimination   5. LU Factorization              6. Bisection Method\n";
         cout << "7. False Position Method       8. Newton's Method              9. Secant Method\n";
-        cout << "10. Other Method 1            11. Other Method 2              12. Exit\n";
+        cout << "10. Runge Kutta Method         11. Inverse Matrix             12. Exit\n";
         cout << "Enter your choice: ";
 
         cin >> choice;
