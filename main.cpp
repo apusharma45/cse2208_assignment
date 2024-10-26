@@ -2,6 +2,7 @@
 #include "linear_methods.h"
 #include "non_linear_methods.h"
 #include"inverseMatrix.h"
+#include "runge_kutta.h"
 #include <bits/stdc++.h>
 using namespace std;
 
