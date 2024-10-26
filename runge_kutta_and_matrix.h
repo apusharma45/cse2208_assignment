@@ -1,4 +1,4 @@
-//header file for runge-kutta and matrix inversion method
+//header file for runge-kutta method
 #ifndef RUNGE_KUTTA_H
 #define RUNGE_KUTTA_H
 
